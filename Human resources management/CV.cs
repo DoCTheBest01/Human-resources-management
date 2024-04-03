@@ -54,5 +54,10 @@ namespace Human_resources_management
         {
 
         }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

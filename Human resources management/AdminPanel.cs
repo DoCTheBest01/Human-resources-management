@@ -1,38 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 using System.IO;
-using System.Configuration;
+using System.Windows.Media;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+
 namespace Human_resources_management
 {
     public partial class frm_AdminPanel : Form
     {
-        string personallycode;
-        public frm_AdminPanel()
+        string pID;
+        public frm_AdminPanel(string pID)
         {
             InitializeComponent();
+            this.pID = pID;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             label10.Text = DateTime.Now.ToLongTimeString();
-
             label9.Text = DateTime.Now.ToLongDateString();
         }
 
-        private void Form6_FormClosing(object sender, FormClosingEventArgs e)
+        private void frm_AdminPanel_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("آیا از خارج شدن برنامه اطمینان دارید", "شتاب", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
-                frm_AdminPanel form6 = new frm_AdminPanel();
-                form6.Close();
+                this.Close();
             }
             else
             {
@@ -41,57 +38,51 @@ namespace Human_resources_management
 
         }
 
-        private void عضویتجدیدToolStripMenuItem_Click(object sender, EventArgs e)
+        private void New_Party_ToolStripMenuItem_Click(object sender, EventArgs e) // عضو جدید
         {
-            groupBox1.BringToFront();
-            groupBox2.SendToBack();
-            groupBox3.SendToBack();
-            groupBox4.SendToBack();
+            grp_AddNewParty.BringToFront();
+            grp_Project.SendToBack();
+            grp_AdminTraffic.SendToBack();
+            grp_Traffic.SendToBack();
 
         }
 
-        private void ترددToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Self_Traffic_ToolStripMenuItem_Click(object sender, EventArgs e) // تردد ادمین
         {
-            groupBox3.BringToFront();
-            groupBox2.SendToBack();
-            groupBox1.SendToBack();
-            groupBox4.SendToBack();
-            string connectionString = "Data Source=DESKTOP-MSRBBB5\\MYSQL;Initial Catalog=Shetab;Integrated Security=True";
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            string selectQuery = "SELECT TOP(1000) [Pcode_TP]AS [کد پرسنلی],[Enter_TP]AS [ورود],[Exit_TP]AS [خروج],[Time_TP]AS [زمان],[Date_TP]AS [تاریخ] FROM[Shetab].[dbo].[Traffic_Panel] WHERE Traffic_Panel.Pcode_TP=@Pcode_TP";
-            SqlCommand command = new SqlCommand(selectQuery, connection);
-            command.Parameters.AddWithValue("@Pcode_TP", label6.Text);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet dataSet = new DataSet();
-            adapter.Fill(dataSet, "Traffic_Panel");
-            connection.Close();
+            grp_AdminTraffic.BringToFront();
+            grp_Project.SendToBack();
+            grp_AddNewParty.SendToBack();
+            grp_Traffic.SendToBack();
+            DataSet dataSet;
+            using (var connection = SQLProvider.Connect())
+            {
+                string selectQuery = "SELECT TOP(1000) [Pcode_TP] AS [کد پرسنلی], [Enter_TP] AS [ورود], [Exit_TP] AS [خروج], [Time_TP] AS [زمان], [Date_TP] AS [تاریخ] FROM [Shetab].[dbo].[Traffic_Panel] WHERE Traffic_Panel.Pcode_TP=@Pcode_TP";
+                dataSet = connection.ExecQuery(selectQuery, "Traffic_Panel", new Dictionary<string, object>()
+                {
+                    { "@Pcode_TP", label6.Text }
+                });
+            }
             dataGridView2.DataBindings.Clear();
             dataGridView2.DataBindings.Add(new Binding("dataSource", dataSet, "Traffic_Panel"));
         }
 
-        private void تردداعضاToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Traffic_ToolStripMenuItem_Click(object sender, EventArgs e) // تردد اعضا
         {
-            groupBox4.BringToFront();
-            groupBox2.SendToBack();
-            groupBox3.SendToBack();
-            groupBox1.SendToBack();
+            grp_Traffic.BringToFront();
+            grp_Project.SendToBack();
+            grp_AdminTraffic.SendToBack();
+            grp_AddNewParty.SendToBack();
         }
 
-        private void پروژهToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Project_ToolStripMenuItem_Click(object sender, EventArgs e) // پروژه
         {
-            groupBox2.BringToFront();
-            groupBox1.SendToBack();
-            groupBox3.SendToBack();
-            groupBox4.SendToBack();
+            grp_Project.BringToFront();
+            grp_AddNewParty.SendToBack();
+            grp_AdminTraffic.SendToBack();
+            grp_Traffic.SendToBack();
         }
 
-        private void groupBox4_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form6_Load(object sender, EventArgs e)
+        private void grp_Traffic_Enter(object sender, EventArgs e)
         {
 
         }
@@ -101,16 +92,15 @@ namespace Human_resources_management
             pictureBox3.Image.Save(stream, pictureBox3.Image.RawFormat);
             return stream.GetBuffer();
         }
-        private void button5_Click(object sender, EventArgs e)
+        private void btn_ChoosePic_Click(object sender, EventArgs e)
         {
             OpenFileDialog openfiledialog = new OpenFileDialog();
             if (openfiledialog.ShowDialog() == DialogResult.OK)
             {
                 pictureBox3.Image = new Bitmap(openfiledialog.FileName);
-
             }
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_Submit_Click(object sender, EventArgs e)
         {
             if (textBox1.Text == "")
             {
@@ -120,19 +110,19 @@ namespace Human_resources_management
             {
                 MessageBox.Show("نام خانوادگی وارد نشده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (textBox3.Text == "")
+            else if (txt_ICode.Text == "")
             {
                 MessageBox.Show("کد ملی وارد نشده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (textBox4.Text == "")
+            else if (txt_birthday.Text == "")
             {
                 MessageBox.Show("تاریخ تولد وارد نشده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (textBox5.Text == "")
+            else if (txt_PCode.Text == "")
             {
                 MessageBox.Show("کد پرسنلی وارد نشده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (textBox6.Text == "")
+            else if (txt_Password.Text == "")
             {
                 MessageBox.Show("رمز عبور وارد نشده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -144,63 +134,41 @@ namespace Human_resources_management
             }
             else if (MessageBox.Show("آیا از ثبت داده اطمینان دارید؟", "شتاب", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
             {
-                try
+                int rowsAffected;
+                using (var connection = SQLProvider.Connect())
                 {
-                    string connectionString = "Data Source=DESKTOP-MSRBBB5\\MYSQL;Initial Catalog=Shetab;Integrated Security=True";
-                    // ساخت اتصال
-                    SqlConnection connection = new SqlConnection(connectionString);
-
-                    // باز کردن اتصال
-                    connection.Open();
-
-                    // دستور SQL برای افزودن داده
                     string insertQuery = "Insert Into Information (FName_IN,LName_IN,Pcode_IN,Incode_IN,Birthday_IN,Password_IN,Picture_IN) Values (@FName_IN,@LName_IN,@Pcode_IN,@Incode_IN,@Birthday_IN,@Password_IN,@Picture_IN)";
-
-                    // ساخت یک شیء Command با استفاده از دستور SQL و اتصال
-                    SqlCommand command = new SqlCommand(insertQuery, connection);
+                    string value1 = textBox1.Text;//FName
+                    string value2 = textBox2.Text;//LName
+                    string value3 = txt_ICode.Text;//Icode
+                    string value4 = txt_birthday.Text;//Birthday
+                    string value5 = txt_PCode.Text;//Pcode
+                    string value6 = txt_Password.Text;//Password
+                    rowsAffected = connection.ExecCommand(insertQuery, new Dictionary<string, object>()
                     {
-                        string value1 = textBox1.Text;//FName
-                        string value2 = textBox2.Text;//LName
-                        string value3 = textBox3.Text;//Icode
-                        string value4 = textBox4.Text;//Birthday
-                        string value5 = textBox5.Text;//Pcode
-                        string value6 = textBox6.Text;//Password
-                        // اضافه کردن پارامترها با مقادیر مورد نظر
-                        command.Parameters.AddWithValue("@FName_IN", value1);
-                        command.Parameters.AddWithValue("@LName_IN", value2);
-                        command.Parameters.AddWithValue("@Pcode_IN", value5);
-                        command.Parameters.AddWithValue("@Incode_IN", value3);
-                        command.Parameters.AddWithValue("@Birthday_IN", value4);                      
-                        command.Parameters.AddWithValue("@Password_IN", value6);
-                        command.Parameters.AddWithValue("@Picture_IN", Getpicture());
-                        // اجرای دستور SQL
-                        int rowsAffected = command.ExecuteNonQuery();
-
-                        MessageBox.Show("داده با موفقیت ذخیره شد", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                    }
+                        { "@FName_IN", value1 },
+                        { "@LName_IN", value2 },
+                        { "@Pcode_IN", value5 },
+                        { "@Incode_IN", value3 },
+                        { "@Birthday_IN", value4 },
+                        { "@Password_IN", value6 },
+                        { "@Picture_IN", Getpicture() }
+                    });
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(" این کاربر قبلا ثبت نام شده است!", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
+                MessageBox.Show("داده با موفقیت ذخیره شد", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
-
-        private void Form6_Load_1(object sender, EventArgs e)
+        private void frm_AdminPanel_Load(object sender, EventArgs e)
         {
-            personallycode = class2.TextBoxValue;
-            string connectionString = "Data Source=DESKTOP-MSRBBB5\\MYSQL;Initial Catalog=Shetab;Integrated Security=True";
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            string selectQuery = "SELECT TOP(1000) [FName_IN],[LName_IN],[Pcode_IN],[Incode_IN],[Picture_IN]FROM[Shetab].[dbo].[Information]WHERE Information.Pcode_IN=@Pcode_IN";
-            SqlCommand command = new SqlCommand(selectQuery, connection);
-            command.Parameters.AddWithValue("@Pcode_IN", personallycode);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet dataSet = new DataSet();
-            adapter.Fill(dataSet, "Information");
-            connection.Close();
+            DataSet dataSet;
+            using (var connection = SQLProvider.Connect())
+            {
+                string selectQuery = "SELECT TOP(1000) [FName_IN],[LName_IN],[Pcode_IN],[Incode_IN],[Picture_IN]FROM[Shetab].[dbo].[Information]WHERE Information.Pcode_IN=@Pcode_IN";
+                dataSet = connection.ExecQuery(selectQuery, "Information", new Dictionary<string, object>()
+                {
+                    { "@Pcode_IN", this.pID },
+                });
+            }
             label5.Text = dataSet.Tables["Information"].Rows[0][0].ToString();
             label8.Text = dataSet.Tables["Information"].Rows[0][1].ToString();
             label6.Text = dataSet.Tables["Information"].Rows[0][2].ToString();
@@ -215,32 +183,100 @@ namespace Human_resources_management
                 }
             }
         }
-
         private void button6_Click(object sender, EventArgs e)
         {
-            string connectionString = "Data Source=DESKTOP-MSRBBB5\\MYSQL;Initial Catalog=Shetab;Integrated Security=True";
-            SqlConnection connection = new SqlConnection(connectionString);
-            connection.Open();
-            string selectQuery = "SELECT TOP(1000) [Pcode_TP]AS [کد پرسنلی],[Enter_TP]AS [ورود],[Exit_TP]AS [خروج],[Time_TP]AS [زمان],[Date_TP]AS [تاریخ] FROM[Shetab].[dbo].[Traffic_Panel] WHERE Traffic_Panel.Pcode_TP=@Pcode_TP";
-            SqlCommand command = new SqlCommand(selectQuery, connection);
-            command.Parameters.AddWithValue("@Pcode_TP", textBox7.Text);
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataSet dataSet = new DataSet();
-            adapter.Fill(dataSet, "Traffic_Panel");
-            connection.Close();
+            DataSet dataSet;
+            using (var connection = SQLProvider.Connect())
+            {
+                string selectQuery = "SELECT TOP(1000) [Pcode_TP]AS [کد پرسنلی],[Enter_TP]AS [ورود],[Exit_TP]AS [خروج],[Time_TP]AS [زمان],[Date_TP]AS [تاریخ] FROM[Shetab].[dbo].[Traffic_Panel] WHERE Traffic_Panel.Pcode_TP=@Pcode_TP";
+                dataSet = connection.ExecQuery(selectQuery, "Traffic_Panel", new Dictionary<string, object>()
+                {
+                    { "@Pcode_TP", txt_pID.Text }
+                });
+            }
             dataGridView1.DataBindings.Clear();
             dataGridView1.DataBindings.Add(new Binding("dataSource", dataSet, "Traffic_Panel"));
         }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frm_CV form9 = new frm_CV();
             form9.Show();
         }
+        private void btn_PrintSelfTraffic_Click(object sender, EventArgs e)
+        {
+            DataSet dataSet;
+            using (var conn = SQLProvider.Connect())
+            {
+                string selectQuery = "SELECT * FROM [Shetab].[dbo].[Traffic_Panel] WHERE Traffic_Panel.Pcode_TP=@Pcode_TP ORDER BY [Time_TP] DESC;";
+                dataSet = conn.ExecQuery(selectQuery, new Dictionary<string, object>()
+                {
+                    { "@Pcode_TP", this.pID }
+                });
+            }
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK && dialog.CheckPathExists)
+            {
+                GeneratePdf(dataSet, dialog.FileName);
+            }
+        }
+        private void btn_PrintTraffic_Click(object sender, EventArgs e)
+        {
+            DataTable dataTable = (DataTable)dataGridView1.DataSource;
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable.Copy());
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK && dialog.CheckPathExists)
+            {
+                GeneratePdf(dataSet, dialog.FileName);
+            }
+        }
+        private static void GeneratePdf(DataSet dataSet, string outputPath)
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+
+            foreach (DataTable table in dataSet.Tables)
+            {
+                // Add a new page for each table in the DataSet
+                PdfPage page = document.AddPage();
+
+                // Get an XGraphics object for drawing
+                XGraphics gfx = XGraphics.FromPdfPage(page);
+
+                // Create a font and brush for drawing text
+                XFont font = new XFont("Arial", 12, XFontStyle.Regular);
+                XBrush brush = XBrushes.Black;
+
+                // Draw table headers
+                int y = 20;
+                foreach (DataColumn column in table.Columns)
+                {
+                    gfx.DrawString(column.ColumnName, font, brush, 20, y);
+                    y += 20;
+                }
+
+                // Draw table data
+                y = 40;
+                foreach (DataRow row in table.Rows)
+                {
+                    int x = 20;
+                    foreach (DataColumn column in table.Columns)
+                    {
+                        gfx.DrawString(row[column].ToString(), font, brush, x, y);
+                        x += 150; // You can adjust the spacing between columns here
+                    }
+                    y += 20;
+                }
+            }
+
+            // Save the document to the specified output path
+            document.Save(outputPath);
+
+            // Close the document
+            document.Close();
+        }
+
     }
 }

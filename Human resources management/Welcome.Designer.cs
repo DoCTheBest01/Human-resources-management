@@ -31,6 +31,7 @@
             this.btn_admin_login = new System.Windows.Forms.Button();
             this.btn_employee_login = new System.Windows.Forms.Button();
             this.btn_traffic = new System.Windows.Forms.Button();
+            this.lbl_birthday_notice = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btn_admin_login
@@ -63,12 +64,24 @@
             this.btn_traffic.UseVisualStyleBackColor = true;
             this.btn_traffic.Click += new System.EventHandler(this.button3_Click);
             // 
+            // lbl_birthday_notice
+            // 
+            this.lbl_birthday_notice.AutoSize = true;
+            this.lbl_birthday_notice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.lbl_birthday_notice.Location = new System.Drawing.Point(12, 177);
+            this.lbl_birthday_notice.Name = "lbl_birthday_notice";
+            this.lbl_birthday_notice.Size = new System.Drawing.Size(27, 17);
+            this.lbl_birthday_notice.TabIndex = 3;
+            this.lbl_birthday_notice.Text = "N/A";
+            this.lbl_birthday_notice.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // frm_Welcome
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(5F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(220, 211);
+            this.ClientSize = new System.Drawing.Size(218, 203);
+            this.Controls.Add(this.lbl_birthday_notice);
             this.Controls.Add(this.btn_traffic);
             this.Controls.Add(this.btn_employee_login);
             this.Controls.Add(this.btn_admin_login);
@@ -78,10 +91,12 @@
             this.MaximumSize = new System.Drawing.Size(236, 250);
             this.MinimumSize = new System.Drawing.Size(236, 250);
             this.Name = "frm_Welcome";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Shetab_Userlogin";
             this.Load += new System.EventHandler(this.Enter_User_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -90,7 +105,7 @@
         private System.Windows.Forms.Button btn_admin_login;
         private System.Windows.Forms.Button btn_employee_login;
         private System.Windows.Forms.Button btn_traffic;
-
+        private System.Windows.Forms.Label lbl_birthday_notice;
     }
 }
 
