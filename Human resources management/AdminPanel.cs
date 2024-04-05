@@ -215,9 +215,11 @@ namespace Human_resources_management
             }
 
             SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "PDF Document(*.pdf) | *.pdf";
+            dialog.FileName = "untitled";
             if (dialog.ShowDialog() == DialogResult.OK && dialog.CheckPathExists)
             {
-                GeneratePdf(dataSet, dialog.FileName);
+                Utils.GeneratePdf(dataSet, dialog.FileName);
             }
         }
         private void btn_PrintTraffic_Click(object sender, EventArgs e)
@@ -227,56 +229,14 @@ namespace Human_resources_management
             dataSet.Tables.Add(dataTable.Copy());
 
             SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "PDF Document(*.pdf) | *.pdf";
+            dialog.FileName = "untitled";
             if (dialog.ShowDialog() == DialogResult.OK && dialog.CheckPathExists)
             {
-                GeneratePdf(dataSet, dialog.FileName);
+                Utils.GeneratePdf(dataSet, dialog.FileName);
             }
         }
-        private static void GeneratePdf(DataSet dataSet, string outputPath)
-        {
-            // Create a new PDF document
-            PdfDocument document = new PdfDocument();
-
-            foreach (DataTable table in dataSet.Tables)
-            {
-                // Add a new page for each table in the DataSet
-                PdfPage page = document.AddPage();
-
-                // Get an XGraphics object for drawing
-                XGraphics gfx = XGraphics.FromPdfPage(page);
-
-                // Create a font and brush for drawing text
-                XFont font = new XFont("Arial", 12, XFontStyle.Regular);
-                XBrush brush = XBrushes.Black;
-
-                // Draw table headers
-                int y = 20;
-                foreach (DataColumn column in table.Columns)
-                {
-                    gfx.DrawString(column.ColumnName, font, brush, 20, y);
-                    y += 20;
-                }
-
-                // Draw table data
-                y = 40;
-                foreach (DataRow row in table.Rows)
-                {
-                    int x = 20;
-                    foreach (DataColumn column in table.Columns)
-                    {
-                        gfx.DrawString(row[column].ToString(), font, brush, x, y);
-                        x += 150; // You can adjust the spacing between columns here
-                    }
-                    y += 20;
-                }
-            }
-
-            // Save the document to the specified output path
-            document.Save(outputPath);
-
-            // Close the document
-            document.Close();
-        }
+        
 
     }
 }

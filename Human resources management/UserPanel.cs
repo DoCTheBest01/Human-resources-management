@@ -127,5 +127,20 @@ namespace Human_resources_management
         {
 
         }
+
+        private void btn_PrintTraffic_Click(object sender, EventArgs e)
+        {
+            DataTable dataTable = (DataTable)dataGridView1.DataSource;
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable.Copy());
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "PDF Document(*.pdf) | *.pdf";
+            dialog.FileName = "untitled";
+            if (dialog.ShowDialog() == DialogResult.OK && dialog.CheckPathExists)
+            {
+                Utils.GeneratePdf(dataSet, dialog.FileName);
+            }
+        }
     }
 }

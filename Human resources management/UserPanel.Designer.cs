@@ -106,7 +106,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(25, 36);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(157, 150);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -130,20 +130,20 @@
             // رزومهفردیToolStripMenuItem
             // 
             this.رزومهفردیToolStripMenuItem.Name = "رزومهفردیToolStripMenuItem";
-            this.رزومهفردیToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.رزومهفردیToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.رزومهفردیToolStripMenuItem.Text = "رزومه فردی";
             this.رزومهفردیToolStripMenuItem.Click += new System.EventHandler(this.رزومهفردیToolStripMenuItem_Click);
             // 
             // پروژهToolStripMenuItem
             // 
             this.پروژهToolStripMenuItem.Name = "پروژهToolStripMenuItem";
-            this.پروژهToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.پروژهToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.پروژهToolStripMenuItem.Text = "پروژه";
             // 
             // trafficToolStripMenuItem
             // 
             this.trafficToolStripMenuItem.Name = "trafficToolStripMenuItem";
-            this.trafficToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.trafficToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.trafficToolStripMenuItem.Text = "تردد";
             this.trafficToolStripMenuItem.Click += new System.EventHandler(this.trafficToolStripMenuItem_Click);
             // 
@@ -158,7 +158,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(763, 11);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip1.Size = new System.Drawing.Size(91, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(52, 27);
             this.toolStrip1.TabIndex = 41;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -168,7 +168,7 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(353, 206);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
@@ -223,12 +223,13 @@
             // btn_PrintTraffic
             // 
             this.btn_PrintTraffic.Location = new System.Drawing.Point(539, 596);
-            this.btn_PrintTraffic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_PrintTraffic.Margin = new System.Windows.Forms.Padding(4);
             this.btn_PrintTraffic.Name = "btn_PrintTraffic";
             this.btn_PrintTraffic.Size = new System.Drawing.Size(100, 28);
             this.btn_PrintTraffic.TabIndex = 44;
             this.btn_PrintTraffic.Text = "چاپ";
             this.btn_PrintTraffic.UseVisualStyleBackColor = true;
+            this.btn_PrintTraffic.Click += new System.EventHandler(this.btn_PrintTraffic_Click);
             // 
             // pictureBox2
             // 
@@ -236,7 +237,7 @@
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.InitialImage")));
             this.pictureBox2.Location = new System.Drawing.Point(16, 220);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(333, 342);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -318,7 +319,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(854, 664);
             this.MinimumSize = new System.Drawing.Size(854, 664);
             this.Name = "frm_UserPanel";

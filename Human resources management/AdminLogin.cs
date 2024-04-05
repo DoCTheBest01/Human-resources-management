@@ -25,7 +25,6 @@ namespace Human_resources_management
             if (String.IsNullOrWhiteSpace(textBox1.Text) || String.IsNullOrEmpty(textBox1.Text))
             {
                 MessageBox.Show("کد پرسنلی وارد نشده است دوباره تلاش کنید", "شتاب", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             }
             else if (String.IsNullOrWhiteSpace(textBox2.Text) || String.IsNullOrEmpty(textBox2.Text))
             {
@@ -36,10 +35,11 @@ namespace Human_resources_management
                 DataSet dataSet;
                 using (var connection = SQLProvider.Connect())
                 {
-                    string selectQuery = "SELECT TOP (1000) [FName_IN],[LName_IN],[Pcode_IN],[Incode_IN],[Birthday_IN],[Password_IN],[Picture_IN]FROM[Shetab].[dbo].[Information] WHERE Information.Pcode_IN=@Pcode_IN";
+                    string selectQuery = "SELECT TOP (1000) [FName_IN], [LName_IN], [Pcode_IN], [Incode_IN], [Birthday_IN], [Password_IN], [Picture_IN] FROM [Shetab].[dbo].[Information] WHERE Information.Pcode_IN=@Pcode_IN AND Information.Password_IN=@Password_IN";
                     dataSet = connection.ExecQuery(selectQuery, new Dictionary<string, object>()
                     {
-                        { "@Pcode_IN", textBox1.Text }
+                        { "@Pcode_IN", textBox1.Text },
+                        { "@Password_IN", textBox2.Text }
                     });
                 }
                 if (textBox1.Text == "alisre")
